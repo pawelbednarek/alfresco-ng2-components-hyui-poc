@@ -17,7 +17,7 @@
 
 import { Injectable } from '@angular/core';
 import { OAuthService, OAuthStorage } from 'angular-oauth2-oidc';
-import { EMPTY, Observable } from 'rxjs';
+import { EMPTY, from, Observable } from 'rxjs';
 import { catchError, map } from 'rxjs/operators';
 import { AppConfigService, AppConfigValues } from '../app-config/app-config.service';
 import { OauthConfigModel } from '../models/oauth-config.model';
@@ -79,7 +79,7 @@ export class OIDCAuthenticationService extends BaseAuthenticationService {
     }
 
     login(username: string, password: string, rememberMe: boolean = false): Observable<{ type: string; ticket: any }> {
-        return this.auth.baseAuthLogin(username, password).pipe(
+        return from(this.auth.baseAuthLogin(username, password)).pipe(
             map((response) => {
                 this.saveRememberMeCookie(rememberMe);
                 this.onLogin.next(response);

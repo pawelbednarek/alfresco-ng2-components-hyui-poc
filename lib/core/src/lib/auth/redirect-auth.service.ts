@@ -18,7 +18,7 @@
 import { Inject, Injectable } from '@angular/core';
 import { AuthConfig, AUTH_CONFIG, OAuthErrorEvent, OAuthService, OAuthStorage, TokenResponse } from 'angular-oauth2-oidc';
 import { JwksValidationHandler } from 'angular-oauth2-oidc-jwks';
-import { from, Observable } from 'rxjs';
+import { Observable } from 'rxjs';
 import { distinctUntilChanged, filter, map, shareReplay, startWith } from 'rxjs/operators';
 import { AuthService } from './auth.service';
 
@@ -108,18 +108,18 @@ export class RedirectAuthService extends AuthService {
     this.ensureDiscoveryDocument().then(() => void this.oauthService.initLoginFlow(stateKey));
   }
 
-  baseAuthLogin(username: string, password: string): Observable<TokenResponse> {
+  async baseAuthLogin(username: string, password: string): Promise<TokenResponse> {
     this.oauthService.useHttpBasicAuth = true;
 
-    return from(this.oauthService.fetchTokenUsingPasswordFlow(username, password)).pipe(
-        map((response) => {
-            const props = new Map<string, string>();
-            props.set('id_token', response.id_token);
-            // for backward compatibility we need to set the response in our storage
-            this.oauthService['storeAccessTokenResponse'](response.access_token, response.refresh_token, response.expires_in, response.scope, props);
-            return response;
-        })
-    );
+    await this.ensureDiscoveryDocument();
+
+    return this.oauthService.fetchTokenUsingPasswordFlow(username, password).then((response) => {
+        const props = new Map<string, string>();
+        props.set('id_token', response.id_token);
+        // for backward compatibility we need to set the response in our storage
+        this.oauthService['storeAccessTokenResponse'](response.access_token, response.refresh_token, response.expires_in, response.scope, props);
+        return response;
+    });
   }
 
   async loginCallback(): Promise<string | undefined> {

@@ -39,7 +39,7 @@ export abstract class AuthService {
    */
   abstract login(currentUrl?: string): Promise<void> | void;
 
-  abstract baseAuthLogin(username: string, password: string): Observable<TokenResponse> ;
+  abstract baseAuthLogin(username: string, password: string): Promise<TokenResponse> ;
 
   /**
    * Disconnect from IdP.
