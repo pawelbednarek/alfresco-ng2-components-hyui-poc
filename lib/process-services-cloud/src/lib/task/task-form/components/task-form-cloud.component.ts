@@ -22,7 +22,6 @@ import {
 import { TaskDetailsCloudModel } from '../../start-task/models/task-details-cloud.model';
 import { TaskCloudService } from '../../services/task-cloud.service';
 import { FormRenderingService, FormModel, ContentLinkModel, FormOutcomeEvent } from '@alfresco/adf-core';
-import { AttachFileCloudWidgetComponent } from '../../../form/components/widgets/attach-file/attach-file-cloud-widget.component';
 import { DropdownCloudWidgetComponent } from '../../../form/components/widgets/dropdown/dropdown-cloud.widget';
 import { DateCloudWidgetComponent } from '../../../form/components/widgets/date/date-cloud.widget';
 import { takeUntil } from 'rxjs/operators';
@@ -120,7 +119,6 @@ export class TaskFormCloudComponent implements OnInit, OnChanges, OnDestroy {
     constructor(
         private taskCloudService: TaskCloudService,
         private formRenderingService: FormRenderingService) {
-        this.formRenderingService.setComponentTypeResolver('upload', () => AttachFileCloudWidgetComponent, true);
         this.formRenderingService.setComponentTypeResolver('dropdown', () => DropdownCloudWidgetComponent, true);
         this.formRenderingService.setComponentTypeResolver('date', () => DateCloudWidgetComponent, true);
     }
