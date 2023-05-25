@@ -22,8 +22,15 @@ import { Pipe, PipeTransform } from '@angular/core';
 })
 export class TypeCastPipe implements PipeTransform {
 
-    transform<T>(value: any, _type: (new (...args: any[]) => T) | T): T {
-        return value as T;
+    transform<T>(sourceObj: any, type: (new (...args: any[]) => T) | T): T {
+        let containsKey = true;
+        for (const key of Object.keys(sourceObj)) {
+            if (!(key in Object.keys(type))) {
+                containsKey = false;
+                break;
+            }
+        }
+        return containsKey ? sourceObj as T : null;
     }
 
 }
