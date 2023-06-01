@@ -58,6 +58,11 @@
               },
               {
                 "glob": "**/*",
+                "input": "dist/libs/core/lib/prebuilt-themes",
+                "output": ""
+              },
+              {
+                "glob": "**/*",
                 "input": "lib/core/src/lib/assets",
                 "output": "/assets"
               },
