@@ -122,11 +122,7 @@ jobs:
         with:
           fetch-depth: 0 # Fetch all history for all tags and branches
       - uses: ./.github/actions/setup
-      - name: E2e failing result download pre
-        uses: actions/download-artifact@v3
-        with:
-          name: e2e-global-failing
-      - name: 
+      - name: Append failures
         run: |
           if [ -f "global-e2e.txt" ]; then
           valueFile=`cat global-e2e.txt`  
