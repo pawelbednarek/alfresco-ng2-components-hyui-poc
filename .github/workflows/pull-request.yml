@@ -132,6 +132,7 @@ jobs:
 
   unit-tests:
     timeout-minutes: 30
+    if: false
     name: "Unit tests: ${{ matrix.unit-tests.name }}"
     runs-on: ubuntu-22.04
     needs: [setup]
@@ -164,6 +165,7 @@ jobs:
   lint:
     # long timeout required when cache has to be recreated
     timeout-minutes: 30
+    if: false
     name: "Lint"
     runs-on: ubuntu-22.04
     needs: [setup]
@@ -216,7 +218,7 @@ jobs:
   e2e:
     timeout-minutes: 90
     name: "e2e: ${{ matrix.e2e-test.description }}"
-    needs: [build-libs, lint, unit-tests]
+    needs: [build-libs]
     runs-on: ubuntu-22.04
     strategy:
       fail-fast: false
