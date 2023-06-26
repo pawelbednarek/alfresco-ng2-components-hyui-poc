@@ -110,91 +110,12 @@ jobs:
             exit 1
           fi
 
-  check-if-pr-is-approved:
-    runs-on: ubuntu-22.04
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@v3
-        with:
-         fetch-depth: 0
-
-      - name: Get branch name
-        uses: Alfresco/alfresco-build-tools/.github/actions/get-branch-name@v1.36.0
-
-      - name: Save commit message
-        uses: Alfresco/alfresco-build-tools/.github/actions/get-commit-message@v1.36.0
-
-      - name: ci:force flag parser
-        shell: bash
-        run: |
-          if [ "${{ github.event_name }}" == "schedule" ] || [ "${{ github.actor }}" == "dependabot[bot]" ]; then
-            echo -e "\033[32mci:force check can be skipped\033[0m"
-            skip_check="true"
-          elif [[ "$COMMIT_MESSAGE" == *"[ci:force]"* ]]; then
-              echo -e "\033[32m[ci:force] flag detected. No need for approval.\033[0m"
-              skip_check="true"
-          fi
-
-      - name: Get PR number
-        if: ${{ github.event_name != 'schedule' }}
-        uses: kamatama41/get-pr-number-action@5c77b38a1b4974ebf8a9521a689f38a5898eadd6
-        id: action
-        with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-
-      - name: show pr number
-        shell: bash
-        run: |
-          echo "PR: ${{ steps.action.outputs.number }}"
-
-      - name: check if pr is approved
-        env:
-          DEVEL_FLAG: ${{ inputs.devel }}
-          GH_TOKEN: ${{ github.token }}
-          skip_check: "false"
-        run: |
-          if [ "${{ github.event_name }}" == "schedule" ] || [ "${{ github.actor }}" == "dependabot[bot]" ]; then
-            echo -e "\033[32mci:force check can be skipped\033[0m"
-            skip_check="true"
-          elif [[ "$COMMIT_MESSAGE" == *"[ci:force]"* ]]; then
-            echo -e "\033[32m[ci:force] flag detected. No need for approval.\033[0m"
-            skip_check="true"
-          fi
-
-          if [ "${{ github.actor }}" == "dependabot[bot]" ] || [ "${{ github.actor }}" == "alfresco-build" ]; then
-            echo -e "\033[32mCommit by ${{ github.actor }}. No need for approval.\033[0m"
-            skip_check="true"
-          fi
-
-          if [ "${{ github.event_name }}" == "schedule" ]; then
-            echo -e "\033[32mSchedule event\033[0m"
-            skip_check="true"
-          fi
-
-          if [[ "$DEVEL_FLAG" == "true" ]]; then
-            echo -e "\033[32mDevel flag\033[0m"
-            skip_check="true"
-          fi
-
-          if [ "$skip_check" == "false" ]; then
-            echo "Checking PR approval"
-            prNumber=${{ steps.action.outputs.number }}
-            echo "PR: $prNumber"
-            checkApproval=$(gh api /repos/$GITHUB_REPOSITORY/pulls/$prNumber/reviews | jq '.[] | select(.state == "APPROVED") | .user.login')
-            if [[ $checkApproval ]]; then
-              echo -e "\033[32mPR approved\033[0m"
-            else
-              echo -e "\033[31mPR NOT approved\033[0m"
-              exit 1
-            fi
-          fi
-
   setup:
     # long timeout required when cache has to be recreated
     timeout-minutes: 30
     name: "Setup"
     runs-on: ubuntu-22.04
-    needs: [check-if-pr-is-approved, check-package-lock]
+    needs: [check-package-lock]
     steps:
       - name: Checkout repository
         uses: actions/checkout@v3
@@ -487,7 +408,7 @@ jobs:
     if: ${{ always() }}
     runs-on: ubuntu-latest
     name: Final Results
-    needs: [check-if-pr-is-approved, check-package-lock, setup, unit-tests, lint, build-libs, e2e, e2e-storybook]
+    needs: [check-package-lock, setup, unit-tests, lint, build-libs, e2e, e2e-storybook]
     steps:
       - uses: slackapi/slack-github-action@v1.23.0
         name: Nofify QA failure
