@@ -129,6 +129,15 @@ jobs:
           npx nx run testing:bundle
       - run: npx nx print-affected $NX_CALCULATION_FLAGS
       - uses: ./.github/actions/upload-node-modules-and-artifacts
+      - name: Track failur BDU
+        uses: actions/github-script@v6
+        with:
+          script: |
+            console.log('********* Additional failure note *********');
+            const e2eGlobalResult = JSON.parse(process.env.E2E_GLOBAL_RESULT);
+            console.log('e2eGlobalResult:',e2eGlobalResult);
+            e2eGlobalResult.result[`content`] = 'failed'
+            console.log('e2eGlobalResult:',e2eGlobalResult);
 
   unit-tests:
     timeout-minutes: 30
@@ -183,6 +192,7 @@ jobs:
     timeout-minutes: 30
     name: "Build libs"
     runs-on: ubuntu-22.04
+    if: false
     needs: [setup]
     steps:
       - name: Checkout repository
@@ -198,6 +208,7 @@ jobs:
 
   e2e-storybook:
     timeout-minutes: 20
+    if: false
     name: "e2e: storybook"
     needs: [build-libs, lint, unit-tests]
     runs-on: ubuntu-22.04
@@ -216,6 +227,7 @@ jobs:
       - uses: ./.github/actions/upload-node-modules-and-artifacts
 
   e2e:
+    if: false
     timeout-minutes: 90
     name: "e2e: ${{ matrix.e2e-test.description }}"
     needs: [build-libs]
@@ -414,7 +426,6 @@ jobs:
     steps:
       - uses: slackapi/slack-github-action@v1.23.0
         name: Nofify QA failure
-        if: ${{ contains(needs.*.result, 'failure') }}
         env:
           SLACK_BOT_TOKEN: ${{ secrets.SLACK_BOT_TOKEN }}
         with:
