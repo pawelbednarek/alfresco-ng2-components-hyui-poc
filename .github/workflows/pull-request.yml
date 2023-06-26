@@ -122,13 +122,6 @@ jobs:
         with:
           fetch-depth: 0 # Fetch all history for all tags and branches
       - uses: ./.github/actions/setup
-      - name: install
-        run: |
-          npm ci
-          npx nx run cli:bundle
-          npx nx run testing:bundle
-      - run: npx nx print-affected $NX_CALCULATION_FLAGS
-      - uses: ./.github/actions/upload-node-modules-and-artifacts
       - name: Track failur BDU
         uses: actions/github-script@v6
         with:
@@ -138,6 +131,7 @@ jobs:
             console.log('e2eGlobalResult:',e2eGlobalResult);
             e2eGlobalResult.result[`content`] = 'failed'
             console.log('e2eGlobalResult:',e2eGlobalResult);
+            core.exportVariable('E2E_GLOBAL_RESULT', 'e2eGlobalResult');
 
   unit-tests:
     timeout-minutes: 30
