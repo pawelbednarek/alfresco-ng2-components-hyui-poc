@@ -431,7 +431,7 @@ jobs:
           name: e2e-global-failing
       - shell: bash
         run: |
-          value=cat global-e2e.txt
+          value=`cat global-e2e.txt`
           echo $value
           echo "E2E_GLOBAL_RESULT=$value" >> "$GITHUB_OUTPUT"
 
