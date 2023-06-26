@@ -1,7 +1,6 @@
 name: "pull-request"
 
 on:
-  workflow_dispatch:
   workflow_call:
     inputs:
       dry-run-flag:
