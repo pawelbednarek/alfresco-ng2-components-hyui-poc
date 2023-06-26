@@ -122,16 +122,27 @@ jobs:
         with:
           fetch-depth: 0 # Fetch all history for all tags and branches
       - uses: ./.github/actions/setup
-      - name: Track failur BDU
-        uses: actions/github-script@v6
+      - name: E2e failing result download pre
+        uses: actions/download-artifact@v3
         with:
-          script: |
-            console.log('********* Additional failure note *********');
-            const e2eGlobalResult = JSON.parse(process.env.E2E_GLOBAL_RESULT);
-            console.log('e2eGlobalResult:',e2eGlobalResult);
-            e2eGlobalResult.result[`content`] = 'failed'
-            console.log('e2eGlobalResult:',e2eGlobalResult);
-            core.exportVariable('E2E_GLOBAL_RESULT', 'e2eGlobalResult');
+          name: e2e-global-failing
+      - name: 
+        run: |
+          if [ -f "global-e2e.txt" ]; then
+          valueFile=`cat global-e2e.txt`  
+          IFS=',' read -ra failed_array <<< "$valueFile"
+          failed_array+=("process")
+          else 
+              failed_array=("process")
+          fi
+          appendFailure=$( IFS=','; echo "${failed_array[*]}" )
+          echo $appendFailure > global-e2e.txt
+      - name: E2e failing result upload
+        uses: actions/upload-artifact@v3
+        with:
+          name: e2e-global-failing
+          path: global-e2e.txt
+
 
   unit-tests:
     timeout-minutes: 30
@@ -418,6 +429,16 @@ jobs:
     name: Final Results
     needs: [check-package-lock, setup, unit-tests, lint, build-libs, e2e, e2e-storybook]
     steps:
+      - name: E2e failing result download
+        uses: actions/download-artifact@v3
+        with:
+          name: e2e-global-failing
+      - shell: bash
+        run: |
+          value=cat global-e2e.txt
+          echo $value
+          echo "E2E_GLOBAL_RESULT=$value" >> "$GITHUB_OUTPUT"
+
       - uses: slackapi/slack-github-action@v1.23.0
         name: Nofify QA failure
         env:
