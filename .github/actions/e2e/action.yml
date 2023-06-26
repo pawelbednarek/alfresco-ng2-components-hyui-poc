@@ -144,6 +144,7 @@ runs:
         DEPS: "${{ inputs.deps }}"
 
       uses: nick-fields/retry@v2.8.2
+      id: e2e-run
       with:
         timeout_minutes: 40
         max_attempts: 2
@@ -161,6 +162,21 @@ runs:
           else
             bash ./scripts/github/e2e/e2e.sh "$E2E_TEST_ID" "$DEPS" || exit 1
           fi
+
+    - name: Track failur BDU
+      uses: actions/github-script@v6
+      if: ${{ steps.e2e-run.outcome == 'failure' }}
+      env:
+        E2E_TEST_ID: "${{ inputs.e2e-test-id }}"
+      with:
+        script: |
+          console.log('********* Additional failure note *********');
+          const e2eGlobalResult = JSON.parse(process.env.E2E_GLOBAL_RESULT);
+          console.log('e2eGlobalResult:',e2eGlobalResult);
+          const e2eTestId = process.env.E2E_TEST_ID;
+          console.log('Failed:',e2eTestId);
+          e2eGlobalResult.result[`${e2eTestId}`] = 'failed'
+          console.log('e2eGlobalResult:',e2eGlobalResult);
 
     - name: upload artifacts on gh
       id: upload_gh

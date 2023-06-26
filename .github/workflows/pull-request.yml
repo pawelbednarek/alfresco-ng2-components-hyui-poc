@@ -1,6 +1,7 @@
 name: "pull-request"
 
 on:
+  workflow_dispatch:
   workflow_call:
     inputs:
       dry-run-flag:
@@ -92,6 +93,7 @@ env:
   PLAYWRIGHT_STORYBOOK_E2E_HOST: http://localhost
   PLAYWRIGHT_STORYBOOK_E2E_PORT: 4400
   PROXY_HOST_ECM: ${{ secrets.E2E_HOST }}
+  E2E_GLOBAL_RESULT: '{"result":{"core":"failed"}}'
 
 jobs:
   check-package-lock:
@@ -490,12 +492,12 @@ jobs:
     steps:
       - uses: slackapi/slack-github-action@v1.23.0
         name: Nofify QA failure
-        if: ${{ github.event_name == 'schedule' && contains(needs.*.result, 'failure') }}
+        if: ${{ contains(needs.*.result, 'failure') }}
         env:
           SLACK_BOT_TOKEN: ${{ secrets.SLACK_BOT_TOKEN }}
         with:
-          channel-id: 'C016SMNNL8L' #guild-channel
-          slack-message: "🔴 Warning: The daily ADF cronjob failed\nWorkflow run : <https://github.com/Alfresco/alfresco-ng2-components/actions/runs/${{ github.run_id }}| here>\n"
+          channel-id: 'D056HA6MP6Y' #guild-channel
+          slack-message: "🔴 Warning: The daily ADF ${{ fromJson(env.E2E_GLOBAL_RESULT) }}  cronjob failed\nWorkflow run : <https://github.com/Alfresco/alfresco-ng2-components/actions/runs/${{ github.run_id }}| here>\n"
       - name: workflow failure
         run: exit 1
         if: ${{ contains(needs.*.result, 'failure') }}
