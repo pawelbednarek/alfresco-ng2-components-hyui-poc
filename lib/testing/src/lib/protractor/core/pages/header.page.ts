@@ -19,6 +19,7 @@ import { element, by, protractor, browser, $, $$ } from 'protractor';
 import { BrowserVisibility } from '../utils/browser-visibility';
 import { BrowserActions } from '../utils/browser-actions';
 
+// @deprecated This class is no longer used by ADF and Apps and will be removed
 export class HeaderPage {
 
     checkBox = element(by.cssContainingText('.mat-checkbox-label', 'Show menu button'));
