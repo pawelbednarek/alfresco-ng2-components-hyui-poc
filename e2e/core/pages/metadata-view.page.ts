@@ -32,7 +32,7 @@ export class MetadataViewPage {
     description = $(`span[data-automation-id='card-textitem-value-properties.cm:description']`);
     author = $(`[data-automation-id='card-textitem-value-properties.cm:author']`);
     editIcon = $(`button[data-automation-id='meta-data-card-toggle-edit']`);
-    editIconGeneral = $(`button[data-automation-id='meta-data-card-toggle-generalInfo-edit']`);
+    editIconGeneral = $(`button[data-automation-id='meta-data-generalInfo-edit']`);
     informationButton = $(`button[data-automation-id='meta-data-card-toggle-expand']`);
     informationSpan = $(`span[data-automation-id='meta-data-card-toggle-expand-label']`);
     informationIcon = $(`span[data-automation-id='meta-data-card-toggle-expand-label'] ~ mat-icon`);
@@ -106,7 +106,11 @@ export class MetadataViewPage {
         await BrowserVisibility.waitUntilElementIsNotVisible(this.editIcon);
     }
 
-    async generaleditIconDisplayed(): Promise<void> {
+    async generalEditIconDisplayed(): Promise<void> {
+        await BrowserVisibility.waitUntilElementIsVisible(this.editIconGeneral);
+    }
+
+    async generaleditIconNotDisplayed(): Promise<void> {
         await BrowserVisibility.waitUntilElementIsNotVisible(this.editIconGeneral);
     }
 
@@ -115,7 +119,7 @@ export class MetadataViewPage {
     }
 
     async editIconGeneralClick(): Promise<void> {
-        await BrowserActions.clickExecuteScript('button[data-automation-id="meta-data-card-toggle-generalInfo-edit"]');
+        await BrowserActions.clickExecuteScript('button[data-automation-id="meta-data-generalInfo-edit"]');
     }
 
     async informationButtonIsDisplayed(): Promise<void> {
@@ -217,9 +221,7 @@ export class MetadataViewPage {
     }
 
     async getMetadataGroupTitle(groupName: string): Promise<string> {
-        const group = $(
-            'mat-expansion-panel[data-automation-id="adf-metadata-group-' + groupName + '"] > mat-expansion-panel-header > span > mat-panel-title'
-        );
+        const group = $('mat-expansion-panel[data-automation-id="adf-metadata-group-' + groupName + '"] > mat-expansion-panel-header > span > div > mat-panel-title');
         return BrowserActions.getText(group);
     }
 
