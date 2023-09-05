@@ -15,7 +15,7 @@
  * limitations under the License.
  */
 
-import { Injectable, inject } from '@angular/core';
+import { inject, Injectable } from '@angular/core';
 import { OAuthEvent, OAuthService, OAuthStorage } from 'angular-oauth2-oidc';
 import { EMPTY, Observable } from 'rxjs';
 import { catchError, filter, map } from 'rxjs/operators';
@@ -67,14 +67,6 @@ export class OIDCAuthenticationService extends BaseAuthenticationService {
         return this.appConfig.get(AppConfigValues.AUTHTYPE) === 'OAUTH';
     }
 
-    isImplicitFlow(): boolean {
-        return !!this.appConfig.oauth2?.implicitFlow;
-    }
-
-    isAuthCodeFlow(): boolean {
-        return !!this.appConfig.oauth2?.codeFlow;
-    }
-
     login(username: string, password: string, rememberMe: boolean = false): Observable<{ type: string; ticket: any }> {
         return this.auth.baseAuthLogin(username, password).pipe(
             map((response) => {
@@ -99,10 +91,6 @@ export class OIDCAuthenticationService extends BaseAuthenticationService {
 
     ssoImplicitLogin() {
         this.oauthService.initLoginFlow();
-    }
-
-    ssoCodeFlowLogin() {
-        this.oauthService.initCodeFlow();
     }
 
     isRememberMeSet(): boolean {

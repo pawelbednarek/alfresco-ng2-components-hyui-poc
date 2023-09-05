@@ -16,11 +16,17 @@
  */
 
 import {
-    Component, EventEmitter,
-    Input, OnInit, Output, TemplateRef, ViewEncapsulation, OnDestroy
+    Component,
+    EventEmitter,
+    Input,
+    OnDestroy,
+    OnInit,
+    Output,
+    TemplateRef,
+    ViewEncapsulation
 } from '@angular/core';
 import { AbstractControl, UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
-import { Router, ActivatedRoute, Params } from '@angular/router';
+import { ActivatedRoute, Params, Router } from '@angular/router';
 import { AuthenticationService } from '../../auth/services/authentication.service';
 import { TranslationService } from '../../translation/translation.service';
 import { UserPreferencesService } from '../../common/services/user-preferences.service';
@@ -28,10 +34,7 @@ import { UserPreferencesService } from '../../common/services/user-preferences.s
 import { LoginErrorEvent } from '../models/login-error.event';
 import { LoginSubmitEvent } from '../models/login-submit.event';
 import { LoginSuccessEvent } from '../models/login-success.event';
-import {
-    AppConfigService,
-    AppConfigValues
-} from '../../app-config/app-config.service';
+import { AppConfigService, AppConfigValues } from '../../app-config/app-config.service';
 import { DomSanitizer, SafeStyle } from '@angular/platform-browser';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
@@ -110,7 +113,7 @@ export class LoginComponent implements OnInit, OnDestroy {
     @Output()
     executeSubmit = new EventEmitter<LoginSubmitEvent>();
 
-    implicitFlow: boolean = false;
+    ssoLogin: boolean = false;
 
     form: UntypedFormGroup;
     isError: boolean = false;
@@ -154,8 +157,8 @@ export class LoginComponent implements OnInit, OnDestroy {
                 const oauth = this.appConfig.oauth2;
                 if (oauth && oauth.silentLogin) {
                     this.redirectToImplicitLogin();
-                } else if (oauth && oauth.implicitFlow) {
-                    this.implicitFlow = true;
+                } else if (oauth && oauth.codeFlow) {
+                    this.ssoLogin = true;
                 }
             }
 
