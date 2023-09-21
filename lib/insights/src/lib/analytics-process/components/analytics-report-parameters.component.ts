@@ -30,7 +30,7 @@ import {
     ViewEncapsulation
 } from '@angular/core';
 import { UntypedFormBuilder, UntypedFormControl, UntypedFormGroup, Validators } from '@angular/forms';
-import { MatDialog } from '@angular/material/dialog';
+import { MatLegacyDialog as MatDialog } from '@angular/material/legacy-dialog';
 import moment from 'moment';
 import { ParameterValueModel } from '../../diagram/models/report/parameter-value.model';
 import { ReportParameterDetailsModel } from '../../diagram/models/report/report-parameter-details.model';
