@@ -1,5 +1,5 @@
 <div class="adf-setting-container">
-    <mat-card class="adf-setting-card">
+    <mat-card appearance="outlined" class="adf-setting-card">
         <form id="host-form" [formGroup]="form" (submit)="onSubmit(form.value)" (keydown)="keyDownFunction($event)">
             <mat-form-field *ngIf="showSelectProviders">
                 <mat-select  id="adf-provider-selector" [formControl]="providersControl">

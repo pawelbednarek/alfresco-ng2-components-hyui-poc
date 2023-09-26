@@ -29,7 +29,7 @@ import {
     ViewEncapsulation
 } from '@angular/core';
 import { Location } from '@angular/common';
-import { MatLegacyDialog as MatDialog } from '@angular/material/legacy-dialog';
+import { MatDialog } from '@angular/material/dialog';
 import { ActivatedRoute, Params, Router } from '@angular/router';
 import { NodeEntry, NodePaging, Pagination, Node, SiteEntry, SearchEntry } from '@alfresco/js-api';
 import {
