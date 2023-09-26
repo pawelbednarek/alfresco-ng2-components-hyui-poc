@@ -8,7 +8,7 @@
         mat-form-field {
             width: 100%;
         }
-
+        /* TODO(mdc-migration): The following rule targets internal classes of form-field that may no longer apply for the MDC version. */
         .mat-form-field-label {
             color: var(--adf-theme-mat-grey-color-a200-dark);
         }
@@ -17,7 +17,7 @@
             text-align: right;
         }
 
-        .mat-button {
+        .mat-mdc-button {
             text-transform: uppercase !important;
         }
     }
@@ -49,7 +49,7 @@
     }
 
     &-start-form-container {
-        .mat-card {
+        .mat-mdc-card {
             box-shadow: none !important;
             padding: 0 !important;
         }
