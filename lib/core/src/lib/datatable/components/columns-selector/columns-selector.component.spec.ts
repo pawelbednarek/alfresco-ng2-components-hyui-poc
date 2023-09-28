@@ -25,9 +25,9 @@ import { TranslateModule } from '@ngx-translate/core';
 import { By } from '@angular/platform-browser';
 import { TestbedHarnessEnvironment } from '@angular/cdk/testing/testbed';
 import { HarnessLoader } from '@angular/cdk/testing';
-import { MatLegacyCheckboxHarness as MatCheckboxHarness } from '@angular/material/legacy-checkbox/testing';
+import { MatCheckboxHarness } from '@angular/material/checkbox/testing';
 
-xdescribe('ColumnsSelectorComponent', () => {
+describe('ColumnsSelectorComponent', () => {
     let fixture: ComponentFixture<ColumnsSelectorComponent>;
     let loader: HarnessLoader;
 
@@ -139,7 +139,7 @@ xdescribe('ColumnsSelectorComponent', () => {
         const columnCheckboxes = await loader.getAllHarnesses(MatCheckboxHarness);
 
         expect(columnCheckboxes.length).toBe(1);
-        expect(await columnCheckboxes[0].getLabelText()).toBe(inputColumns[0].title);
+        expect(await columnCheckboxes[0].getLabelText()).toBe('title0');
     }));
 
     it('should change column visibility', async () => {
@@ -149,7 +149,7 @@ xdescribe('ColumnsSelectorComponent', () => {
         const firstColumnCheckbox = await loader.getHarness(MatCheckboxHarness);
         const checkBoxName = await firstColumnCheckbox.getLabelText();
 
-        const toggledColumnItem = component.columnItems.find(item => item.title === checkBoxName);
+        const toggledColumnItem = <DataColumn> component.columnItems.find(item => item.title === checkBoxName);
         expect(toggledColumnItem.isHidden).toBeFalsy();
 
         await firstColumnCheckbox.toggle();
@@ -190,7 +190,7 @@ xdescribe('ColumnsSelectorComponent', () => {
 
         const checkboxes = await loader.getAllHarnesses(MatCheckboxHarness);
 
-        expect(await checkboxes[0].getLabelText()).toBe(shownDataColumn.title);
-        expect(await checkboxes[1].getLabelText()).toBe(hiddenDataColumn.title);
+        expect(await checkboxes[0].getLabelText()).toBe('shownDataColumn');
+        expect(await checkboxes[1].getLabelText()).toBe('hiddenDataColumn');
     });
 });

@@ -15,6 +15,7 @@
  * limitations under the License.
  */
 
+import { addMinutes } from 'date-fns';
 import { DateFnsUtils } from './date-fns-utils';
 
 describe('Date Format Translations', () => {
@@ -49,7 +50,7 @@ describe('Date Format Translations', () => {
     it('should parse a date correctly', () => {
         const dateString = '2023-09-22';
         const dateFormat = 'yyyy-MM-dd';
-        const expectedParsedDate = new Date('2023-09-22T00:00:00Z');
+        const expectedParsedDate = addMinutes(new Date('2023-09-22T00:00:00Z'), new Date().getTimezoneOffset());
 
         const result = DateFnsUtils.parseDate(dateString, dateFormat);
 
