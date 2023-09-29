@@ -171,17 +171,3 @@ export const fakeTaskCompleted2 = {
     dueDate: null,
     endDate: '2016-11-03T15:25:42.749+0000'
 };
-
-export const fakeOpenTaskList = new TaskListModel({
-    size: 2,
-    total: 2,
-    start: 0,
-    data: [fakeTaskOpen1, fakeTaskOpen2]
-});
-
-export const fakeCompletedTaskList = new TaskListModel({
-    size: 2,
-    total: 2,
-    start: 0,
-    data: [fakeTaskCompleted1, fakeTaskCompleted2]
-});
