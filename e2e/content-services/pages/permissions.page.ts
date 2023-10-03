@@ -56,7 +56,7 @@ export class PermissionsPage {
         const row = this.dataTableComponentPage.getRow('Users and Groups', name);
         await row.click();
         await BrowserActions.click(row.$('[id="adf-select-role-permission"] .mat-select-trigger'));
-        await TestElement.byCss('.mat-select-panel').waitVisible();
+        await TestElement.byCss('.mat-mdc-select-panel').waitVisible();
     }
 
     async clickDeletePermissionButton(username: string): Promise<void> {

@@ -106,7 +106,7 @@ export class ContentServicesPage {
     }
 
     async clickHyperlinkNavigationToggle(): Promise<void> {
-        const hyperlinkToggle = element(by.cssContainingText('.mat-slide-toggle-content', 'Hyperlink navigation'));
+        const hyperlinkToggle = element(by.cssContainingText('.mat-mdc-slide-toggle', 'Hyperlink navigation'));
         await BrowserActions.click(hyperlinkToggle);
     }
 
@@ -272,7 +272,7 @@ export class ContentServicesPage {
     }
 
     async enableInfiniteScrolling(): Promise<void> {
-        const infiniteScrollButton = element(by.cssContainingText('.mat-slide-toggle-content', 'Enable Infinite Scrolling'));
+        const infiniteScrollButton = element(by.cssContainingText('.mat-mdc-slide-toggle', 'Enable Infinite Scrolling'));
         await BrowserActions.click(infiniteScrollButton);
     }
 

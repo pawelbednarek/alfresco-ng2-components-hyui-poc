@@ -93,7 +93,7 @@ export class AddPermissionsDialogPage {
     async selectRole(name: string, role: string) {
         const row = this.userRoleDataTableComponentPage.getRow('Users and Groups', name);
         await BrowserActions.click(row.$('[id="adf-select-role-permission"] .mat-select-trigger'));
-        await TestElement.byCss('.mat-select-panel').waitVisible();
+        await TestElement.byCss('.mat-mdc-select-panel').waitVisible();
         await this.selectOption(role);
     }
 }
