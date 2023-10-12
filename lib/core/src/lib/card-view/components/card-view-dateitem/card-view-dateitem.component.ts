@@ -165,7 +165,7 @@ export class CardViewDateItemComponent extends BaseCardView<CardViewDateItemMode
         return !this.editable && this.showProperty();
     }
 
-    get nonEditableField(): boolean {
+    get isNonEditableField(): boolean {
         return this.editable && !this.property.editable;
     }
 }
