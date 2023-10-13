@@ -56,6 +56,7 @@ import { DataColumnModule } from './data-column/data-column.module';
 import { BooleanCellComponent } from './components/boolean-cell/boolean-cell.component';
 import { AmountCellComponent } from './components/amount-cell/amount-cell.component';
 import { NumberCellComponent } from './components/number-cell/number-cell.component';
+import { IconCellComponent } from './components/icon-cell/icon-cell.component';
 
 @NgModule({
     imports: [
@@ -75,7 +76,8 @@ import { NumberCellComponent } from './components/number-cell/number-cell.compon
         DataColumnModule,
         BooleanCellComponent,
         AmountCellComponent,
-        NumberCellComponent
+        NumberCellComponent,
+        IconCellComponent
     ],
     declarations: [
         DataTableComponent,
