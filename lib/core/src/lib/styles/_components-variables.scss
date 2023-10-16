@@ -47,7 +47,10 @@
         --adf-user-info-container-margin-right: $adf-ref-margin-right,
         --theme-metadata-property-panel-border-color: $metadata-property-panel-border-color,
         --theme-metadata-buttons-background-color: $metadata-buttons-background-color,
-        --theme-metadata-action-button-clear-color: $metadata-action-button-clear-color
+        --theme-metadata-action-button-clear-color: $metadata-action-button-clear-color,
+        --theme-metadata-property-panel-text-color: $metadata-property-panel-text-color,
+        --theme-metadata-property-panel-label-color: $metadata-property-panel-label-color,
+        --theme-metadata-property-panel-title-color: $metadata-property-panel-title-color
     );
 
     // propagates SCSS variables into the CSS variables scope
