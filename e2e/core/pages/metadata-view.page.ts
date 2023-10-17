@@ -125,11 +125,6 @@ export class MetadataViewPage {
         return BrowserActions.getAttribute(this.editIcon, 'title');
     }
 
-    async editPropertyIconIsDisplayed(propertyName: string) {
-        const editPropertyIcon = $('[data-automation-id="header-' + propertyName + '"] .adf-textitem-edit-icon');
-        await BrowserVisibility.waitUntilElementIsPresent(editPropertyIcon);
-    }
-
     async clickResetButton(): Promise<void> {
         const clearPropertyIcon = $('button[data-automation-id="reset-metadata"]');
         await BrowserActions.click(clearPropertyIcon);
