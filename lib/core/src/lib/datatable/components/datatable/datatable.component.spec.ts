@@ -1229,6 +1229,17 @@ describe('DataTable', () => {
         expect(rows[1].getValue('fuel_consumption')).toBe(6);
         expect(rows[2].getValue('fuel_consumption')).toBe(4.9);
     });
+
+    it('should be able to display column of type icon', () => {
+        dataTable.data = new ObjectDataTableAdapter(mockCarsData, mockCarsSchemaDefinition);
+
+        fixture.detectChanges();
+        const rows = dataTable.data.getRows();
+
+        expect(rows[0].getValue('icon')).toBe('airport_shuttle');
+        expect(rows[1].getValue('icon')).toBe('directions_car');
+        expect(rows[2].getValue('icon')).toBe('local_shipping');
+    });
 });
 
 describe('Accesibility', () => {
