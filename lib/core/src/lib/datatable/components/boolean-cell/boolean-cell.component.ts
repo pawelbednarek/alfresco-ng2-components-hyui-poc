@@ -28,7 +28,7 @@ import { BooleanPipe } from '../../../pipes/boolean.pipe';
     changeDetection: ChangeDetectionStrategy.OnPush,
     template: `
         <ng-container *ngIf="value$ | async | adfBoolean as value">
-            <span [title]="value">
+            <span [title]="tooltip">
                 {{ value }}
             </span>
         </ng-container>
@@ -42,8 +42,6 @@ export class BooleanCellComponent extends DataTableCellComponent implements OnIn
     }
 
     ngOnInit() {
-        if (this.column?.key && this.row && this.data) {
-            this.value$.next(this.data.getValue(this.row, this.column, this.resolverFn));
-        }
+        super.ngOnInit();
     }
 }
