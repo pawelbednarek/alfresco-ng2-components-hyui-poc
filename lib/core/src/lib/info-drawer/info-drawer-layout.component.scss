@@ -29,6 +29,7 @@ $adf-info-drawer-icon-size-half: 24px !default;
             letter-spacing: 0.25px;
             padding: 0;
             margin: 0;
+
             &-active {
                 color: var(--theme-primary-color);
             }
@@ -41,8 +42,8 @@ $adf-info-drawer-icon-size-half: 24px !default;
             justify-content: space-between;
             height: 56px;
             margin-bottom: 40px;
-            &-buttons {
 
+            &-buttons {
                 mat-icon {
                     cursor: pointer;
                 }
