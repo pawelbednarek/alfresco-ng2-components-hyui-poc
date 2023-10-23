@@ -299,7 +299,6 @@ describe('Permissions Component', () => {
             await contentServicesPage.checkDeleteIsDisabled('RoleConsumer' + fileModel.name);
             await BrowserActions.closeMenuAndDialogs();
             await contentList.checkActionMenuIsNotDisplayed();
-            await contentServicesPage.metadataContent('RoleConsumer' + fileModel.name);
             await expect(await snackbarPage.getSnackBarMessage()).toEqual('You don\'t have access to do this.');
             await browser.sleep(3000);
             await contentServicesPage.uploadFile(fileLocation);
@@ -317,7 +316,6 @@ describe('Permissions Component', () => {
             await contentServicesPage.checkDeleteIsDisabled('RoleContributor' + fileModel.name);
             await BrowserActions.closeMenuAndDialogs();
             await contentList.checkActionMenuIsNotDisplayed();
-            await contentServicesPage.metadataContent('RoleContributor' + fileModel.name);
             await contentServicesPage.uploadFile(testFileModel.location);
             await contentServicesPage.checkContentIsDisplayed(testFileModel.name);
             await uploadDialog.fileIsUploaded(testFileModel.name);
@@ -351,7 +349,6 @@ describe('Permissions Component', () => {
             await viewerPage.checkFileIsLoaded();
             await viewerPage.clickCloseButton();
             await contentList.waitForTableBody();
-            await contentServicesPage.metadataContent('RoleCoordinator' + fileModel.name);
             await contentServicesPage.uploadFile(pngFileModel.location);
             await contentServicesPage.checkContentIsDisplayed(pngFileModel.name);
             await uploadDialog.fileIsUploaded(pngFileModel.name);
