@@ -15,7 +15,7 @@
  * limitations under the License.
  */
 
-import { Component, Optional, ViewEncapsulation } from '@angular/core';
+import { Component, OnInit, ViewEncapsulation } from '@angular/core';
 import { DataTableCellComponent } from '../datatable-cell/datatable-cell.component';
 import {
     UserPreferencesService,
@@ -23,7 +23,6 @@ import {
 } from '../../../common/services/user-preferences.service';
 import { AppConfigService } from '../../../app-config/app-config.service';
 import { takeUntil } from 'rxjs/operators';
-import { DataTableService } from '../../services/datatable.service';
 
 @Component({
     selector: 'adf-date-cell',
@@ -47,7 +46,7 @@ import { DataTableService } from '../../services/datatable.service';
     encapsulation: ViewEncapsulation.None,
     host: { class: 'adf-date-cell adf-datatable-content-cell' }
 })
-export class DateCellComponent extends DataTableCellComponent {
+export class DateCellComponent extends DataTableCellComponent implements OnInit {
 
     static DATE_FORMAT = 'medium';
 
@@ -64,10 +63,9 @@ export class DateCellComponent extends DataTableCellComponent {
 
     constructor(
         userPreferenceService: UserPreferencesService,
-        @Optional() dataTableService: DataTableService,
         appConfig: AppConfigService
     ) {
-        super(dataTableService);
+        super();
 
         this.dateFormat = appConfig.get('dateValues.defaultDateFormat', DateCellComponent.DATE_FORMAT);
         this.tooltipDateFormat = appConfig.get('dateValues.defaultTooltipDateFormat', DateCellComponent.DATE_FORMAT);
@@ -77,5 +75,9 @@ export class DateCellComponent extends DataTableCellComponent {
                 .pipe(takeUntil(this.onDestroy$))
                 .subscribe(locale => this.currentLocale = locale);
         }
+    }
+
+    ngOnInit(): void {
+        super.ngOnInit();
     }
 }

@@ -20,13 +20,11 @@ import {
     Component,
     ViewEncapsulation,
     Input,
-    Optional,
     OnInit,
     DEFAULT_CURRENCY_CODE,
     Inject
 } from '@angular/core';
 import { DataTableCellComponent } from '../datatable-cell/datatable-cell.component';
-import { DataTableService } from '../../services/datatable.service';
 import { CurrencyConfig } from '../../data/data-column.model';
 import { CommonModule } from '@angular/common';
 
@@ -52,15 +50,12 @@ export class AmountCellComponent extends DataTableCellComponent implements OnIni
     };
 
     constructor(
-        @Optional() dataTableService: DataTableService,
         @Inject(DEFAULT_CURRENCY_CODE) private readonly defaultCurrencyCode: string
     ) {
-        super(dataTableService);
+        super();
     }
 
     ngOnInit() {
-        if (this.column?.key && this.row && this.data) {
-            this.value$.next(this.data.getValue(this.row, this.column, this.resolverFn));
-        }
+        super.ngOnInit();
     }
 }
