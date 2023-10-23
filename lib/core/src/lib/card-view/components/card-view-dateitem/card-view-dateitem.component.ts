@@ -40,7 +40,8 @@ import { isValid } from 'date-fns';
     selector: 'adf-card-view-dateitem',
     templateUrl: './card-view-dateitem.component.html',
     styleUrls: ['./card-view-dateitem.component.scss'],
-    encapsulation: ViewEncapsulation.None
+    encapsulation: ViewEncapsulation.None,
+    host: { class: 'adf-card-view-dateitem' }
 })
 export class CardViewDateItemComponent extends BaseCardView<CardViewDateItemModel> implements OnInit, OnDestroy {
     @Input()
@@ -155,13 +156,5 @@ export class CardViewDateItemComponent extends BaseCardView<CardViewDateItemMode
 
     update() {
         this.cardViewUpdateService.update({ ...this.property } as CardViewDateItemModel, this.property.value);
-    }
-
-    get showDivider(): boolean {
-        return !this.editable && this.showProperty();
-    }
-
-    get isNonEditableField(): boolean {
-        return this.editable && !this.property.editable;
     }
 }
