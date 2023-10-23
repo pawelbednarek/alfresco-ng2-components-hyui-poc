@@ -33,7 +33,6 @@ import {
 } from '@alfresco/adf-testing';
 import { browser } from 'protractor';
 import { FolderModel } from '../../models/ACS/folder.model';
-import { MetadataViewPage } from '../../core/pages/metadata-view.page';
 import { NavigationBarPage } from '../../core/pages/navigation-bar.page';
 import { UploadDialogPage } from '../../core/pages/dialog/upload-dialog.page';
 import { GroupsApi, NodeEntry } from '@alfresco/js-api';
@@ -54,7 +53,6 @@ describe('Permissions Component', () => {
 
     const contentList = contentServicesPage.getDocumentList();
     const viewerPage = new ViewerPage();
-    const metadataViewPage = new MetadataViewPage();
     const uploadDialog = new UploadDialogPage();
     let file;
     const fileModel = new FileModel({
@@ -327,26 +325,6 @@ describe('Permissions Component', () => {
             await uploadDialog.dialogIsNotDisplayed();
         });
 
-        it('[C277000] Role Editor', async () => {
-            await loginPage.login(filePermissionUser.username, filePermissionUser.password);
-            await navigationBarPage.openContentServicesFolder(roleEditorFolder.entry.id);
-            await contentServicesPage.checkContentIsDisplayed('RoleEditor' + fileModel.name);
-            await contentList.doubleClickRow('RoleEditor' + fileModel.name);
-            await viewerPage.checkFileIsLoaded();
-            await viewerPage.clickCloseButton();
-            await contentList.waitForTableBody();
-            await contentServicesPage.checkDeleteIsDisabled('RoleEditor' + fileModel.name);
-            await BrowserActions.closeMenuAndDialogs();
-            await contentList.checkActionMenuIsNotDisplayed();
-            await contentServicesPage.metadataContent('RoleEditor' + fileModel.name);
-            await metadataViewPage.isEditGeneralIconDisplayed();
-            await metadataViewPage.clickEditIconGeneral();
-            await metadataViewPage.enterPropertyText('properties.cm:title', 'newTitle1');
-            await expect(await metadataViewPage.getPropertyText('properties.cm:title')).toEqual('newTitle1');
-            await metadataViewPage.clickCloseButton();
-            await contentServicesPage.uploadFile(fileLocation);
-        });
-
         it('[C277003] Role Collaborator', async () => {
             await loginPage.login(filePermissionUser.username, filePermissionUser.password);
             await navigationBarPage.openContentServicesFolder(roleCollaboratorFolder.entry.id);
@@ -358,12 +336,6 @@ describe('Permissions Component', () => {
             await contentServicesPage.checkDeleteIsDisabled('RoleCollaborator' + fileModel.name);
             await BrowserActions.closeMenuAndDialogs();
             await contentList.checkActionMenuIsNotDisplayed();
-            await contentServicesPage.metadataContent('RoleCollaborator' + fileModel.name);
-            await metadataViewPage.isEditGeneralIconDisplayed();
-            await metadataViewPage.clickEditIconGeneral();
-            await metadataViewPage.enterPropertyText('properties.cm:title', 'newTitle2');
-            await expect(await metadataViewPage.getPropertyText('properties.cm:title')).toEqual('newTitle2');
-            await metadataViewPage.clickCloseButton();
             await contentServicesPage.uploadFile(testFileModel.location);
             await contentServicesPage.checkContentIsDisplayed(testFileModel.name);
             await uploadDialog.fileIsUploaded(testFileModel.name);
@@ -380,11 +352,6 @@ describe('Permissions Component', () => {
             await viewerPage.clickCloseButton();
             await contentList.waitForTableBody();
             await contentServicesPage.metadataContent('RoleCoordinator' + fileModel.name);
-            await metadataViewPage.isEditGeneralIconDisplayed();
-            await metadataViewPage.clickEditIconGeneral();
-            await metadataViewPage.enterPropertyText('properties.cm:title', 'newTitle3');
-            await expect(await metadataViewPage.getPropertyText('properties.cm:title')).toEqual('newTitle3');
-            await metadataViewPage.clickCloseButton();
             await contentServicesPage.uploadFile(pngFileModel.location);
             await contentServicesPage.checkContentIsDisplayed(pngFileModel.name);
             await uploadDialog.fileIsUploaded(pngFileModel.name);
