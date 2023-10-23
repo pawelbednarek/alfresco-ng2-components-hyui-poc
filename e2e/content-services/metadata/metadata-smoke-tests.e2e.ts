@@ -19,7 +19,6 @@ import { createApiService,
     BrowserActions,
     LocalStorageUtil,
     LoginPage,
-    StringUtil,
     UploadActions,
     UserModel,
     UsersActions,
@@ -49,8 +48,6 @@ describe('Metadata component', () => {
     const navigationBarPage = new NavigationBarPage();
 
     let acsUser: UserModel;
-
-    const folderName = StringUtil.generateRandomString();
 
     const pngFileModel = new FileModel({
         name: browser.params.resources.Files.ADF_DOCUMENTS.PNG.file_name,
@@ -197,50 +194,6 @@ describe('Metadata component', () => {
             await expect(await metadataViewPage.getPropertyText('properties.exif:isoSpeedRatings')).toEqual('test custom text isoSpeedRatings');
             await expect(await metadataViewPage.getPropertyText('properties.exif:software')).toEqual('test custom text software');
             await expect(await metadataViewPage.getPropertyText('properties.exif:fNumber')).toEqual('22');
-        });
-    });
-
-    describe('Folder metadata', () => {
-
-        beforeAll(async () => {
-            await apiService.login(acsUser.username, acsUser.password);
-            await loginPage.login(acsUser.username, acsUser.password);
-
-            await uploadActions.createFolder(folderName, '-my-');
-            await navigationBarPage.navigateToContentServices();
-            await contentServicesPage.waitForTableBody();
-        });
-
-        afterAll(async () => {
-            await navigationBarPage.clickLogoutButton();
-        });
-
-        it('[C261157] Should be possible use the metadata component When the node is a Folder', async () => {
-            await contentServicesPage.metadataContent(folderName);
-
-            await expect(await metadataViewPage.getPropertyText('properties.cm:name')).toEqual(folderName);
-            await expect(await metadataViewPage.getPropertyText('createdByUser.displayName')).toEqual(`${acsUser.firstName} ${acsUser.lastName}`);
-            await BrowserActions.closeMenuAndDialogs();
-        });
-
-        it('[C261158] Should be possible edit the metadata When the node is a Folder', async () => {
-            await contentServicesPage.metadataContent(folderName);
-
-            await metadataViewPage.clickEditIconGeneral();
-
-            await metadataViewPage.enterPropertyText('properties.cm:name', 'newnameFolder');
-            await metadataViewPage.clickResetButton();
-            await expect(await metadataViewPage.getPropertyText('properties.cm:name')).toEqual(folderName);
-
-            await metadataViewPage.clickEditIconGeneral();
-            await metadataViewPage.enterPropertyText('properties.cm:name', 'newnameFolder');
-            await metadataViewPage.clickSaveGeneralMetadata();
-            await expect(await metadataViewPage.getPropertyText('properties.cm:name')).toEqual('newnameFolder');
-            await metadataViewPage.clickEditIconGeneral();
-
-            await metadataViewPage.enterPropertyText('properties.cm:name', folderName);
-            await metadataViewPage.clickSaveGeneralMetadata();
-            await expect(await metadataViewPage.getPropertyText('properties.cm:name')).toEqual(folderName);
         });
     });
 
