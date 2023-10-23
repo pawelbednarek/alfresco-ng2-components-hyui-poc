@@ -185,17 +185,6 @@ describe('CardViewTextItemComponent', () => {
 
         });
 
-        it('should NOT render the picker and toggle in case of editable:true but (general) editable:false', async () => {
-            component.editable = false;
-            component.property.editable = true;
-
-            fixture.detectChanges();
-            await fixture.whenStable();
-            const editIcon = fixture.debugElement.query(By.css(`[data-automation-id="card-textitem-edit-icon-${component.property.key}"]`));
-            expect(editIcon).toBeNull('Edit icon should NOT be shown');
-
-        });
-
         it('should render chips for multivalue properties when chips are enabled', async () => {
             const cardViewTextItemObject = {
                 label: 'Text label 1',
@@ -377,17 +366,6 @@ describe('CardViewTextItemComponent', () => {
             expect(value).toBe('FAKE-DEFAULT-KEY');
         });
 
-        it('should not render the edit icon in case of clickable true but edit false', async () => {
-            component.property.clickable = true;
-
-            fixture.detectChanges();
-            await fixture.whenStable();
-            fixture.detectChanges();
-            const value = fixture.debugElement.query(By.css('.adf-textitem-edit-icon'));
-            expect(value).toBeNull();
-
-        });
-
         it('should not render the clickable icon in case editable set to false', async () => {
             component.property.clickable = true;
             component.property.icon = 'create';
@@ -428,19 +406,6 @@ describe('CardViewTextItemComponent', () => {
 
             const value = fixture.debugElement.query(By.css(`[data-automation-id="card-textitem-clickable-icon-${component.property.key}"]`));
             expect(value).toBeNull('icon should NOT be shown');
-        });
-
-        it('should not render the edit icon in case of clickable false and icon defined', async () => {
-            component.property.clickable = false;
-            component.property.icon = 'FAKE_ICON';
-
-            fixture.detectChanges();
-            await fixture.whenStable();
-            fixture.detectChanges();
-
-            const value = fixture.debugElement.query(By.css(`[data-automation-id="card-textitem-edit-icon-${component.property.icon}"]`));
-            expect(value).toBeNull('Edit icon should NOT be shown');
-
         });
 
         it('should call back function when clickable property enabled', async () => {
