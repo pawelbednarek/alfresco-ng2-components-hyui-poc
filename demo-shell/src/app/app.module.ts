@@ -46,7 +46,6 @@ import { FormNodeViewerComponent } from './components/process-service/form-node-
 import { AppsViewComponent } from './components/process-service/apps-view.component';
 import { FilesComponent } from './components/files/files.component';
 import { VersionManagerDialogAdapterComponent } from './components/files/version-manager-dialog-adapter.component';
-import { MetadataDialogAdapterComponent } from './components/files/metadata-dialog-adapter.component';
 import { appRoutes } from './app.routes';
 import { TaskAttachmentsComponent } from './components/process-service/task-attachments.component';
 import { ProcessAttachmentsComponent } from './components/process-service/process-attachments.component';
@@ -114,7 +113,6 @@ import { UserInfoComponent } from './components/app-layout/user-info/user-info.c
         FilesComponent,
         FormComponent,
         VersionManagerDialogAdapterComponent,
-        MetadataDialogAdapterComponent,
         TaskAttachmentsComponent,
         ProcessAttachmentsComponent,
         DemoPermissionComponent,
