@@ -51,7 +51,6 @@ export class ContentServicesPage {
     createdByColumnHeader = 'createdByUser.displayName';
     createdColumnHeader = 'createdAt';
     deleteContentElement = $('button[data-automation-id="Delete"]');
-    metadataAction = $('button[data-automation-id="Info"]');
     versionManagerAction = $('button[data-automation-id="Manage versions"]');
     downloadContent = $('button[data-automation-id="Download"]');
     downloadButton = $('button[title="Download"]');
@@ -73,21 +72,10 @@ export class ContentServicesPage {
         return this.contentList;
     }
 
-    async checkDeleteIsDisabled(content: string): Promise<void> {
-        await this.contentList.clickOnActionMenu(content);
-        const disabledDelete = $(`button[data-automation-id='Delete'][disabled='true']`);
-        await BrowserVisibility.waitUntilElementIsVisible(disabledDelete);
-    }
-
     async deleteContent(content: string): Promise<void> {
         await this.contentList.clickOnActionMenu(content);
         await BrowserActions.click(this.deleteContentElement);
         await this.checkContentIsNotDisplayed(content);
-    }
-
-    async metadataContent(content: string): Promise<void> {
-        await this.contentList.clickOnActionMenu(content);
-        await BrowserActions.click(this.metadataAction);
     }
 
     async versionManagerContent(content: string): Promise<void> {
