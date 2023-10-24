@@ -45,12 +45,12 @@
         --adf-identity-user-info-line-height: $adf-ref-line-height,
         --adf-identity-user-info-font-size: var(--theme-adf-picture-1-font-size),
         --adf-user-info-container-margin-right: $adf-ref-margin-right,
-        --theme-metadata-property-panel-border-color: $adf-ref-metadata-property-panel-border-color,
-        --theme-metadata-buttons-background-color: $adf-ref-metadata-buttons-background-color,
-        --theme-metadata-action-button-clear-color: $adf-ref-metadata-action-button-clear-color,
-        --theme-metadata-property-panel-text-color: $adf-ref-metadata-property-panel-text-color,
-        --theme-metadata-property-panel-label-color: $adf-ref-metadata-property-panel-label-color,
-        --theme-metadata-property-panel-title-color: $adf-ref-metadata-property-panel-title-color
+        --adf-metadata-property-panel-border-color: $adf-ref-metadata-property-panel-border-color,
+        --adf-metadata-buttons-background-color: $adf-ref-metadata-buttons-background-color,
+        --adf-metadata-action-button-clear-color: $adf-ref-metadata-action-button-clear-color,
+        --adf-metadata-property-panel-text-color: $adf-ref-metadata-property-panel-text-color,
+        --adf-metadata-property-panel-label-color: $adf-ref-metadata-property-panel-label-color,
+        --adf-metadata-property-panel-title-color: $adf-ref-metadata-property-panel-title-color
     );
 
     // propagates SCSS variables into the CSS variables scope
