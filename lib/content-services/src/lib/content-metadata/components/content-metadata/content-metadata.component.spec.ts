@@ -792,7 +792,7 @@ describe('ContentMetadataComponent', () => {
         it('should hide metadata fields if displayDefaultProperties is set to false', () => {
             component.displayDefaultProperties = false;
             fixture.detectChanges();
-            const metadataContainer = fixture.debugElement.query(By.css('mat-expansion-panel[data-automation-id="adf-metadata-group-properties"]'));
+            const metadataContainer = fixture.debugElement.query(By.css('[data-automation-id="adf-metadata-group-properties"]'));
             fixture.detectChanges();
             expect(metadataContainer).toBeNull();
         });
@@ -800,7 +800,7 @@ describe('ContentMetadataComponent', () => {
         it('should display metadata fields if displayDefaultProperties is set to true', () => {
             component.displayDefaultProperties = true;
             fixture.detectChanges();
-            const metadataContainer = fixture.debugElement.query(By.css('mat-expansion-panel[data-automation-id="adf-metadata-group-properties"]'));
+            const metadataContainer = fixture.debugElement.query(By.css('[data-automation-id="adf-metadata-group-properties"]'));
             fixture.detectChanges();
             expect(metadataContainer).toBeDefined();
         });
