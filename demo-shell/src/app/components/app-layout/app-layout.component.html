@@ -1,81 +1,88 @@
-<adf-sidenav-layout
-    [sidenavMin]="70"
-    [sidenavMax]="220"
-    [stepOver]="780"
-    data-automation-id="sidenav-layout">
+<adf-sidenav-layout [sidenavMin]="70" [sidenavMax]="220" [stepOver]="780" data-automation-id="sidenav-layout">
+  <adf-sidenav-layout-header>
+    <ng-template>
+      <adf-layout-header id="adf-header" title="ADF Demo Application" redirectUrl="/home" tooltip="ADF Demo Application" [showSidenavToggle]="false">
+        <div class="app-layout-menu-spacer"></div>
 
-    <adf-sidenav-layout-header>
-        <ng-template>
-            <adf-layout-header
-                id="adf-header"
-                title="ADF Demo Application"
-                redirectUrl="/home"
-                tooltip="ADF Demo Application"
-                [showSidenavToggle]="false">
+        <app-search-bar></app-search-bar>
 
-                <div class="app-layout-menu-spacer"></div>
+        <app-shell-user-info [menuPositionX]="'before'" [menuPositionY]="'above'"></app-shell-user-info>
+      </adf-layout-header>
+    </ng-template>
+  </adf-sidenav-layout-header>
 
-                <app-search-bar></app-search-bar>
+  <adf-sidenav-layout-navigation>
+    <ng-template let-isMenuMinimized="isMenuMinimized">
+      <mat-list hyList class="app-sidenav-linklist">
+        <ng-container *ngFor="let link of links">
+          <ng-container *ngIf="link.children">
+            <mat-list-item hyListItem (click)="trigger.openMenu()" [attr.data-automation-id]="link.title | translate" class="app-sidenav-link">
+              <mat-icon matListIcon>{{ link.icon }}</mat-icon>
+              <span *ngIf="!isMenuMinimized()">{{ link.title | translate }}</span>
+              <mat-icon
+                class="app-sidenav-link__expand-button"
+                [matMenuTriggerData]="{ links: link.children }"
+                rippleTrigger
+                mat-icon-button
+                #trigger="matMenuTrigger"
+                [matMenuTriggerFor]="nestedMenu"
+                >arrow_right</mat-icon
+              >
+            </mat-list-item>
+          </ng-container>
 
-                <app-shell-user-info [menuPositionX]="'before'" [menuPositionY]="'above'"></app-shell-user-info>
-            </adf-layout-header>
-        </ng-template>
-    </adf-sidenav-layout-header>
+          <ng-container *ngIf="!link.children">
+            <mat-list-item
+              hyListItem
+              [routerLink]="link.href"
+              routerLinkActive="app-sidenav-link--active"
+              [routerLinkActiveOptions]="{ exact: true }"
+              [attr.data-automation-id]="link.title | translate"
+              class="app-sidenav-link"
+            >
+              <mat-icon matListIcon>{{ link.icon }}</mat-icon>
+              <span *ngIf="!isMenuMinimized()">{{ link.title | translate }}</span>
+            </mat-list-item>
+          </ng-container>
+        </ng-container>
 
-    <adf-sidenav-layout-navigation>
-        <ng-template let-isMenuMinimized="isMenuMinimized">
-            <mat-nav-list class="app-sidenav-linklist">
-                <ng-container *ngFor="let link of links">
-                    <ng-container *ngIf="link.children">
-                        <mat-list-item (click)="trigger.openMenu()" [attr.data-automation-id]="link.title | translate" class="app-sidenav-link">
-                            <mat-icon matListIcon>{{link.icon}}</mat-icon>
-                            <span matLine *ngIf="!isMenuMinimized()">{{link.title | translate }}</span>
-                            <mat-icon class="app-sidenav-link__expand-button" [matMenuTriggerData]="{links: link.children}"
-                                rippleTrigger mat-icon-button #trigger="matMenuTrigger"
-                                [matMenuTriggerFor]="nestedMenu">arrow_right</mat-icon>
-                        </mat-list-item>
-                    </ng-container>
+        <mat-list-item
+          hyListItem
+          adf-logout
+          [enableRedirect]="enableRedirect"
+          redirectUri="/logout"
+          class="app-sidenav-link"
+          data-automation-id="Logout"
+        >
+          <mat-icon matListIcon>exit_to_app</mat-icon>
+          <span *ngIf="!isMenuMinimized()">Logout</span>
+        </mat-list-item>
+      </mat-list>
+    </ng-template>
+  </adf-sidenav-layout-navigation>
 
-                    <ng-container *ngIf="!link.children">
-                        <mat-list-item [routerLink]="link.href"
-                            routerLinkActive="app-sidenav-link--active" [routerLinkActiveOptions]="{ exact: true }"
-                            [attr.data-automation-id]="link.title | translate" class="app-sidenav-link">
-                            <mat-icon matListIcon >{{link.icon}}</mat-icon>
-                            <span matLine *ngIf="!isMenuMinimized()">{{link.title | translate }}</span>
-                        </mat-list-item>
-                    </ng-container>
-                </ng-container>
-
-                <mat-list-item adf-logout [enableRedirect]="enableRedirect" redirectUri="/logout" class="app-sidenav-link" data-automation-id="Logout" >
-                    <mat-icon matListIcon>exit_to_app</mat-icon>
-                    <span matLine *ngIf="!isMenuMinimized()">Logout</span>
-                </mat-list-item>
-            </mat-nav-list>
-
-        </ng-template>
-    </adf-sidenav-layout-navigation>
-
-    <adf-sidenav-layout-content>
-        <ng-template>
-            <router-outlet></router-outlet>
-        </ng-template>
-    </adf-sidenav-layout-content>
-
+  <adf-sidenav-layout-content>
+    <ng-template>
+      <router-outlet></router-outlet>
+    </ng-template>
+  </adf-sidenav-layout-content>
 </adf-sidenav-layout>
 
 <mat-menu #nestedMenu="matMenu" xPosition="after" class="nestedMenu">
-    <ng-template matMenuContent let-links="links">
-        <button mat-menu-item *ngFor="let link of links"
-            class="app-sidenav-link"
-            [attr.data-automation-id]="link.title | translate"
-            routerLinkActive="app-sidenav-link--active"
-            [routerLink]="link.href"
-            [routerLinkActiveOptions]="{ exact: true }">
-
-            <mat-icon matListIcon>{{link.icon}}</mat-icon>
-            {{ link.title | translate }}
-        </button>
-    </ng-template>
+  <ng-template matMenuContent let-links="links">
+    <button
+      mat-menu-item
+      *ngFor="let link of links"
+      class="app-sidenav-link"
+      [attr.data-automation-id]="link.title | translate"
+      routerLinkActive="app-sidenav-link--active"
+      [routerLink]="link.href"
+      [routerLinkActiveOptions]="{ exact: true }"
+    >
+      <mat-icon matListIcon>{{ link.icon }}</mat-icon>
+      {{ link.title | translate }}
+    </button>
+  </ng-template>
 </mat-menu>
 
 <adf-file-uploading-dialog #fileDialog position="left"></adf-file-uploading-dialog>

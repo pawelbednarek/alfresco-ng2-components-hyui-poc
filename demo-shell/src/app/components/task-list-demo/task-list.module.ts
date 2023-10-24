@@ -21,25 +21,32 @@ import { Routes, RouterModule } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { CoreModule } from '@alfresco/adf-core';
 import { ProcessModule } from '@alfresco/adf-process-services';
+import { HyMaterialModule } from '@hyland/ui/material';
+import { HyContentListModule } from '@hyland/ui';
+import { HyPaginationIntl, HyPaginationModule } from '@hyland/ui/candidate/pagination';
 
 const routes: Routes = [
-    {
-      path: '',
-      component: TaskListDemoComponent
-    },
-    {
-        path: ':id',
-        component: TaskListDemoComponent
-    }
+  {
+    path: '',
+    component: TaskListDemoComponent
+  },
+  {
+    path: ':id',
+    component: TaskListDemoComponent
+  }
 ];
 
 @NgModule({
-    imports: [
-        CommonModule,
-        RouterModule.forChild(routes),
-        CoreModule,
-        ProcessModule.forChild()
-    ],
-    declarations: [TaskListDemoComponent]
+  imports: [
+    CommonModule,
+    RouterModule.forChild(routes),
+    CoreModule,
+    ProcessModule.forChild(),
+    HyMaterialModule,
+    HyContentListModule,
+    HyPaginationModule
+  ],
+  declarations: [TaskListDemoComponent],
+  providers: [HyPaginationIntl]
 })
 export class AppTaskListModule {}

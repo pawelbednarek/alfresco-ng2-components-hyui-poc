@@ -9,7 +9,7 @@
       "projectType": "application",
       "architect": {
         "build": {
-          "builder": "@angular-devkit/build-angular:browser",
+          "builder": "@hylandsoftware/hy-ui-devkit:browser",
           "options": {
             "allowedCommonJsDependencies": [
               "minimatch",
@@ -27,6 +27,13 @@
             "main": "demo-shell/src/main.ts",
             "tsConfig": "tsconfig.dev.json",
             "polyfills": "demo-shell/src/polyfills.ts",
+            "i18nPaths": [
+              "demo-shell/src"
+            ],
+            "i18nModules": [
+              "@hyland/ui",
+              "@hyland/ui-shell"
+            ],
             "stylePreprocessorOptions": {
               "includePaths": [
                 "lib"
@@ -182,7 +189,7 @@
           "defaultConfiguration": ""
         },
         "serve": {
-          "builder": "@angular-devkit/build-angular:dev-server",
+          "builder": "@hylandsoftware/hy-ui-devkit:dev-server",
           "options": {
             "browserTarget": "demoshell:build",
             "host": "0.0.0.0",
@@ -252,7 +259,10 @@
             "tsConfig": "lib/core/tsconfig.lib.json",
             "project": "lib/core/ng-package.json"
           },
-          "dependsOn": ["^build", "license"],
+          "dependsOn": [
+            "^build",
+            "license"
+          ],
           "configurations": {
             "production": {
               "project": "lib/core/ng-package.json",
@@ -338,32 +348,32 @@
         },
         "stylelint": {
           "executor": "nx:run-commands",
-              "options": {
-              "commands": [
-                  {
-                      "command": "npx stylelint lib/core/**/*.scss --config stylelint-config.json"
-                  }
-              ]
+          "options": {
+            "commands": [
+              {
+                "command": "npx stylelint lib/core/**/*.scss --config stylelint-config.json"
+              }
+            ]
           }
         },
         "license": {
           "executor": "nx:run-commands",
-              "options": {
-              "commands": [
-                  {
-                      "command": "npx license-checker --production  --failOn 'GPL;GPL-2.0' > licenses.txt"
-                  }
-              ]
+          "options": {
+            "commands": [
+              {
+                "command": "npx license-checker --production  --failOn 'GPL;GPL-2.0' > licenses.txt"
+              }
+            ]
           }
         },
         "pretheme": {
           "executor": "nx:run-commands",
-              "options": {
-              "commands": [
-                  {
-                      "command": "npx webpack -- --config ./lib/config/webpack.style.js --progress --profile --bail"
-                  }
-              ]
+          "options": {
+            "commands": [
+              {
+                "command": "npx webpack -- --config ./lib/config/webpack.style.js --progress --profile --bail"
+              }
+            ]
           }
         },
         "npm-publish": {
@@ -466,12 +476,12 @@
         },
         "stylelint": {
           "executor": "nx:run-commands",
-              "options": {
-              "commands": [
-                  {
-                      "command": "npx stylelint lib/content-services/**/*.scss --config stylelint-config.json"
-                  }
-              ]
+          "options": {
+            "commands": [
+              {
+                "command": "npx stylelint lib/content-services/**/*.scss --config stylelint-config.json"
+              }
+            ]
           }
         },
         "npm-publish": {
@@ -532,12 +542,12 @@
         },
         "stylelint": {
           "executor": "nx:run-commands",
-              "options": {
-              "commands": [
-                  {
-                      "command": "npx stylelint lib/process-services-cloud/**/*.scss --config stylelint-config.json"
-                  }
-              ]
+          "options": {
+            "commands": [
+              {
+                "command": "npx stylelint lib/process-services-cloud/**/*.scss --config stylelint-config.json"
+              }
+            ]
           }
         },
         "npm-publish": {
@@ -553,7 +563,7 @@
                 "forwardAllArgs": true
               }
             ]
-        }
+          }
         }
       }
     },
@@ -638,25 +648,24 @@
             }
           }
         },
-
         "e2e-playwright": {
           "executor": "nx:run-commands",
-              "options": {
-              "commands": [
-                  {
-                      "command": "npx playwright test --config='e2e-playwright/playwright.config.ts'"
-                  }
-              ]
+          "options": {
+            "commands": [
+              {
+                "command": "npx playwright test --config='e2e-playwright/playwright.config.ts'"
+              }
+            ]
           }
         },
         "stylelint": {
           "executor": "nx:run-commands",
-              "options": {
-              "commands": [
-                  {
-                      "command": "npx stylelint lib/process-services-cloud/**/*.scss --config stylelint-config.json"
-                  }
-              ]
+          "options": {
+            "commands": [
+              {
+                "command": "npx stylelint lib/process-services-cloud/**/*.scss --config stylelint-config.json"
+              }
+            ]
           }
         },
         "npm-publish": {
@@ -717,12 +726,12 @@
         },
         "stylelint": {
           "executor": "nx:run-commands",
-              "options": {
-              "commands": [
-                  {
-                      "command": "npx stylelint lib/insights/**/*.scss --config stylelint-config.json"
-                  }
-              ]
+          "options": {
+            "commands": [
+              {
+                "command": "npx stylelint lib/insights/**/*.scss --config stylelint-config.json"
+              }
+            ]
           }
         },
         "npm-publish": {
@@ -809,7 +818,7 @@
             "projectRoot": "lib/testing",
             "outputPath": "dist/libs/testing",
             "main": "lib/testing/index.ts",
-            "generatePackageJson" : true,
+            "generatePackageJson": true,
             "tsConfig": "lib/testing/tsconfig.lib.prod.json",
             "additionalEntryPoints": [
               {
@@ -823,7 +832,7 @@
               "projectRoot": "lib/testing",
               "outputPath": "dist/libs/testing",
               "main": "lib/testing/index.ts",
-              "generatePackageJson" : true,
+              "generatePackageJson": true,
               "tsConfig": "lib/testing/tsconfig.lib.prod.json"
             }
           },
@@ -896,7 +905,7 @@
             "projectRoot": "lib/eslint-angular",
             "outputPath": "dist/libs/eslint-plugin-eslint-angular",
             "main": "lib/eslint-angular/index.ts",
-            "generatePackageJson" : true,
+            "generatePackageJson": true,
             "tsConfig": "lib/eslint-angular/tsconfig.lib.prod.json"
           },
           "configurations": {
@@ -904,7 +913,7 @@
               "projectRoot": "lib/eslint-angular",
               "outputPath": "dist/libs/eslint-plugin-eslint-angular",
               "main": "lib/eslint-angular/index.ts",
-              "generatePackageJson" : true,
+              "generatePackageJson": true,
               "tsConfig": "lib/eslint-angular/tsconfig.lib.prod.json"
             }
           },

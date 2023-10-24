@@ -18,238 +18,249 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { UntypedFormGroup, UntypedFormBuilder, Validators, UntypedFormControl, AbstractControl } from '@angular/forms';
 import { ActivatedRoute, Params } from '@angular/router';
-import { debounceTime, takeUntil } from 'rxjs/operators';
+import { debounceTime, map, takeUntil } from 'rxjs/operators';
 import { Subject } from 'rxjs';
 import { set } from 'date-fns';
+import { PageEvent } from '@angular/material/paginator';
+import { TaskDetailsModel, TaskListService } from '../../../../../lib/process-services';
 
 const DEFAULT_SIZE = 20;
 
 @Component({
-    selector: 'app-task-list-demo',
-    templateUrl: './task-list-demo.component.html',
-    styleUrls: [`./task-list-demo.component.scss`]
+  selector: 'app-task-list-demo',
+  templateUrl: './task-list-demo.component.html',
+  styleUrls: [`./task-list-demo.component.scss`]
 })
-
 export class TaskListDemoComponent implements OnInit, OnDestroy {
-    taskListForm: UntypedFormGroup;
+  taskListForm: UntypedFormGroup;
 
-    errorMessage: string;
-    minValue = 1;
+  errorMessage: string;
+  minValue = 1;
 
-    appId: number;
-    defaultAppId: number;
-    id: string;
-    processDefinitionId: string;
-    processInstanceId: string;
-    state: string;
-    assignment: string;
-    name: string;
-    sort: string;
-    start: number;
-    size: number = DEFAULT_SIZE;
-    page: number = 0;
-    dueAfter: string;
-    dueBefore: string;
+  appId: number;
+  defaultAppId: number;
+  id: string;
+  processDefinitionId: string;
+  processInstanceId: string;
+  state: string;
+  assignment: string;
+  name: string;
+  sort: string;
+  start: number;
+  size: number = DEFAULT_SIZE;
+  page: number = 0;
+  dueAfter: string;
+  dueBefore: string;
 
-    includeProcessInstance: boolean;
+  includeProcessInstance: boolean;
 
-    assignmentOptions = [
-        {value: 'assignee', title: 'Assignee'},
-        {value: 'candidate', title: 'Candidate'}
-    ];
+  assignmentOptions = [
+    { value: 'assignee', title: 'Assignee' },
+    { value: 'candidate', title: 'Candidate' }
+  ];
 
-    includeProcessInstanceOptions = [
-        {value: 'include', title: 'Include'},
-        {value: 'exclude', title: 'Exclude'}
-    ];
+  includeProcessInstanceOptions = [
+    { value: 'include', title: 'Include' },
+    { value: 'exclude', title: 'Exclude' }
+  ];
 
-    stateOptions = [
-        {value: 'all', title: 'All'},
-        {value: 'active', title: 'Active'},
-        {value: 'completed', title: 'Completed'}
-    ];
+  stateOptions = [
+    { value: 'all', title: 'All' },
+    { value: 'active', title: 'Active' },
+    { value: 'completed', title: 'Completed' }
+  ];
 
-    sortOptions = [
-        {value: 'created-asc', title: 'Created (asc)'},
-        {value: 'created-desc', title: 'Created (desc)'},
-        {value: 'due-asc', title: 'Due (asc)'},
-        {value: 'due-desc', title: 'Due (desc)'}
-    ];
+  sortOptions = [
+    { value: 'created-asc', title: 'Created (asc)' },
+    { value: 'created-desc', title: 'Created (desc)' },
+    { value: 'due-asc', title: 'Due (asc)' },
+    { value: 'due-desc', title: 'Due (desc)' }
+  ];
 
-    private onDestroy$ = new Subject<boolean>();
+  private onDestroy$ = new Subject<boolean>();
 
-    constructor(private route: ActivatedRoute,
-                private formBuilder: UntypedFormBuilder) {
-    }
+  constructor(private route: ActivatedRoute, private formBuilder: UntypedFormBuilder, private taskService: TaskListService) {}
 
-    ngOnInit() {
-        if (this.route) {
-            this.route.params.forEach((params: Params) => {
-                if (params['id']) {
-                    this.defaultAppId = +params['id'];
-                }
-            });
+  data: TaskDetailsModel[] = [];
+  paginatedData: TaskDetailsModel[] = [];
+
+  ngOnInit() {
+    if (this.route) {
+      this.route.params.forEach((params: Params) => {
+        if (params['id']) {
+          this.defaultAppId = +params['id'];
         }
-
-        this.appId = this.defaultAppId;
-        this.errorMessage = 'Insert App Id';
-
-        this.buildForm();
+      });
     }
 
-    ngOnDestroy() {
-        this.onDestroy$.next(true);
-        this.onDestroy$.complete();
+    this.appId = this.defaultAppId;
+    this.errorMessage = 'Insert App Id';
+
+    this.taskService
+      .findAllTasksWithoutState({})
+      .pipe(map((value) => value.data))
+      .subscribe((data) => {
+        this.data = data;
+        this.paginatedData = data.slice(0, 10);
+      });
+
+    this.buildForm();
+  }
+
+  paginate(page: PageEvent) {
+    const lastItemIndex = (page.pageIndex + 1) * page.pageSize;
+    const firstItemIndex = lastItemIndex - page.pageSize;
+    this.paginatedData = this.data.slice(firstItemIndex, lastItemIndex);
+  }
+
+  ngOnDestroy() {
+    this.onDestroy$.next(true);
+    this.onDestroy$.complete();
+  }
+
+  buildForm() {
+    this.taskListForm = this.formBuilder.group({
+      taskAppId: new UntypedFormControl(this.defaultAppId, [Validators.pattern('^[0-9]*$')]),
+      taskName: new UntypedFormControl(),
+      taskId: new UntypedFormControl(),
+      taskProcessDefinitionId: new UntypedFormControl(),
+      taskProcessInstanceId: new UntypedFormControl(),
+      taskAssignment: new UntypedFormControl(),
+      taskState: new UntypedFormControl(),
+      taskSort: new UntypedFormControl(),
+      taskSize: new UntypedFormControl(null, [Validators.pattern('^[0-9]*$'), Validators.min(this.minValue)]),
+      taskPage: new UntypedFormControl(null, [Validators.pattern('^[0-9]*$'), Validators.min(this.minValue)]),
+      taskDueAfter: new UntypedFormControl(),
+      taskDueBefore: new UntypedFormControl(),
+      taskStart: new UntypedFormControl(null, [Validators.pattern('^[0-9]*$')]),
+      taskIncludeProcessInstance: new UntypedFormControl()
+    });
+
+    this.taskListForm.valueChanges.pipe(debounceTime(500), takeUntil(this.onDestroy$)).subscribe((taskFilter) => {
+      if (this.isFormValid()) {
+        this.filterTasks(taskFilter);
+      }
+    });
+  }
+
+  filterTasks(taskFilter: any) {
+    this.appId = taskFilter.taskAppId;
+    this.id = taskFilter.taskId;
+    this.processDefinitionId = taskFilter.taskProcessDefinitionId;
+    this.processInstanceId = taskFilter.taskProcessInstanceId;
+    this.name = taskFilter.taskName;
+    this.assignment = taskFilter.taskAssignment;
+    this.state = taskFilter.taskState;
+    this.sort = taskFilter.taskSort;
+    this.start = taskFilter.taskStart;
+    this.dueAfter = taskFilter.taskDueAfter ? this.setDueAfterFilter(taskFilter.taskDueAfter) : null;
+    this.dueBefore = taskFilter.taskDueBefore;
+
+    if (taskFilter.taskSize) {
+      this.size = parseInt(taskFilter.taskSize, 10);
     }
 
-    buildForm() {
-        this.taskListForm = this.formBuilder.group({
-            taskAppId: new UntypedFormControl(this.defaultAppId, [Validators.pattern('^[0-9]*$')]),
-            taskName: new UntypedFormControl(),
-            taskId: new UntypedFormControl(),
-            taskProcessDefinitionId: new UntypedFormControl(),
-            taskProcessInstanceId: new UntypedFormControl(),
-            taskAssignment: new UntypedFormControl(),
-            taskState: new UntypedFormControl(),
-            taskSort: new UntypedFormControl(),
-            taskSize: new UntypedFormControl(null, [Validators.pattern('^[0-9]*$'), Validators.min(this.minValue)]),
-            taskPage: new UntypedFormControl(null, [Validators.pattern('^[0-9]*$'), Validators.min(this.minValue)]),
-            taskDueAfter: new UntypedFormControl(),
-            taskDueBefore: new UntypedFormControl(),
-            taskStart: new UntypedFormControl(null, [Validators.pattern('^[0-9]*$')]),
-            taskIncludeProcessInstance: new UntypedFormControl()
-        });
-
-        this.taskListForm.valueChanges
-            .pipe(
-                debounceTime(500),
-                takeUntil(this.onDestroy$)
-            )
-            .subscribe(taskFilter => {
-                if (this.isFormValid()) {
-                    this.filterTasks(taskFilter);
-                }
-            });
+    if (taskFilter.taskPage) {
+      const pageValue = parseInt(taskFilter.taskPage, 10);
+      this.page = pageValue > 0 ? pageValue - 1 : pageValue;
+    } else {
+      this.page = 0;
     }
 
-    filterTasks(taskFilter: any) {
-        this.appId = taskFilter.taskAppId;
-        this.id = taskFilter.taskId;
-        this.processDefinitionId = taskFilter.taskProcessDefinitionId;
-        this.processInstanceId = taskFilter.taskProcessInstanceId;
-        this.name = taskFilter.taskName;
-        this.assignment = taskFilter.taskAssignment;
-        this.state = taskFilter.taskState;
-        this.sort = taskFilter.taskSort;
-        this.start = taskFilter.taskStart;
-        this.dueAfter = taskFilter.taskDueAfter ? this.setDueAfterFilter(taskFilter.taskDueAfter) : null;
-        this.dueBefore = taskFilter.taskDueBefore;
+    this.includeProcessInstance = taskFilter.taskIncludeProcessInstance === 'include';
+  }
 
-        if (taskFilter.taskSize) {
-            this.size = parseInt(taskFilter.taskSize, 10);
-        }
+  setDueAfterFilter(date): string {
+    const dueDateFilter = set(new Date(date), {
+      hours: 23,
+      minutes: 59,
+      seconds: 59
+    });
+    return dueDateFilter.toString();
+  }
 
-        if (taskFilter.taskPage) {
-            const pageValue = parseInt(taskFilter.taskPage, 10);
-            this.page = pageValue > 0 ? pageValue - 1 : pageValue;
-        } else {
-            this.page = 0;
-        }
+  resetTaskForm() {
+    this.taskListForm.reset();
+    this.resetQueryParameters();
+  }
 
-        this.includeProcessInstance = taskFilter.taskIncludeProcessInstance === 'include';
-    }
+  resetQueryParameters() {
+    this.appId = null;
+    this.id = null;
+    this.processDefinitionId = null;
+    this.processInstanceId = null;
+    this.name = null;
+    this.assignment = null;
+    this.state = null;
+    this.sort = null;
+    this.start = null;
+    this.size = DEFAULT_SIZE;
+    this.page = null;
+    this.dueAfter = null;
+    this.dueBefore = null;
+  }
 
-    setDueAfterFilter(date): string {
-        const dueDateFilter = set(new Date(date), {
-            hours: 23,
-            minutes: 59,
-            seconds: 59
-        });
-        return dueDateFilter.toString();
-    }
+  isFormValid() {
+    return this.taskListForm?.dirty && this.taskListForm.valid;
+  }
 
-    resetTaskForm() {
-        this.taskListForm.reset();
-        this.resetQueryParameters();
-    }
+  private getControl<T extends AbstractControl>(key: string): T {
+    return this.taskListForm.get(key) as T;
+  }
 
-    resetQueryParameters() {
-        this.appId = null;
-        this.id = null;
-        this.processDefinitionId = null;
-        this.processInstanceId = null;
-        this.name = null;
-        this.assignment = null;
-        this.state = null;
-        this.sort = null;
-        this.start = null;
-        this.size = DEFAULT_SIZE;
-        this.page = null;
-        this.dueAfter = null;
-        this.dueBefore = null;
-    }
+  get taskAppId(): UntypedFormControl {
+    return this.getControl<UntypedFormControl>('taskAppId');
+  }
 
-    isFormValid() {
-        return this.taskListForm?.dirty && this.taskListForm.valid;
-    }
+  get taskId(): UntypedFormControl {
+    return this.getControl<UntypedFormControl>('taskId');
+  }
 
-    private getControl<T extends AbstractControl>(key: string): T {
-        return this.taskListForm.get(key) as T;
-    }
+  get taskProcessDefinitionId(): UntypedFormControl {
+    return this.getControl<UntypedFormControl>('taskProcessDefinitionId');
+  }
 
-    get taskAppId(): UntypedFormControl {
-        return this.getControl<UntypedFormControl>('taskAppId');
-    }
+  get taskProcessInstanceId(): UntypedFormControl {
+    return this.getControl<UntypedFormControl>('taskProcessInstanceId');
+  }
 
-    get taskId(): UntypedFormControl {
-        return this.getControl<UntypedFormControl>('taskId');
-    }
+  get taskName(): UntypedFormControl {
+    return this.getControl<UntypedFormControl>('taskName');
+  }
 
-    get taskProcessDefinitionId(): UntypedFormControl {
-        return this.getControl<UntypedFormControl>('taskProcessDefinitionId');
-    }
+  get taskAssignment(): UntypedFormControl {
+    return this.getControl<UntypedFormControl>('taskAssignment');
+  }
 
-    get taskProcessInstanceId(): UntypedFormControl {
-        return this.getControl<UntypedFormControl>('taskProcessInstanceId');
-    }
+  get taskState(): UntypedFormControl {
+    return this.getControl<UntypedFormControl>('taskState');
+  }
 
-    get taskName(): UntypedFormControl {
-        return this.getControl<UntypedFormControl>('taskName');
-    }
+  get taskSort(): UntypedFormControl {
+    return this.getControl<UntypedFormControl>('taskSort');
+  }
 
-    get taskAssignment(): UntypedFormControl {
-        return this.getControl<UntypedFormControl>('taskAssignment');
-    }
+  get taskIncludeProcessInstance(): UntypedFormControl {
+    return this.getControl<UntypedFormControl>('taskIncludeProcessInstance');
+  }
 
-    get taskState(): UntypedFormControl {
-        return this.getControl<UntypedFormControl>('taskState');
-    }
+  get taskStart(): UntypedFormControl {
+    return this.getControl<UntypedFormControl>('taskStart');
+  }
 
-    get taskSort(): UntypedFormControl {
-        return this.getControl<UntypedFormControl>('taskSort');
-    }
+  get taskSize(): UntypedFormControl {
+    return this.getControl<UntypedFormControl>('taskSize');
+  }
 
-    get taskIncludeProcessInstance(): UntypedFormControl {
-        return this.getControl<UntypedFormControl>('taskIncludeProcessInstance');
-    }
+  get taskPage(): UntypedFormControl {
+    return this.getControl<UntypedFormControl>('taskPage');
+  }
 
-    get taskStart(): UntypedFormControl {
-        return this.getControl<UntypedFormControl>('taskStart');
-    }
+  get taskDueAfter(): UntypedFormControl {
+    return this.getControl<UntypedFormControl>('taskDueAfter');
+  }
 
-    get taskSize(): UntypedFormControl {
-        return this.getControl<UntypedFormControl>('taskSize');
-    }
-
-    get taskPage(): UntypedFormControl {
-        return this.getControl<UntypedFormControl>('taskPage');
-    }
-
-    get taskDueAfter(): UntypedFormControl {
-        return this.getControl<UntypedFormControl>('taskDueAfter');
-    }
-
-    get taskDueBefore(): UntypedFormControl {
-        return this.getControl<UntypedFormControl>('taskDueBefore');
-    }
+  get taskDueBefore(): UntypedFormControl {
+    return this.getControl<UntypedFormControl>('taskDueBefore');
+  }
 }

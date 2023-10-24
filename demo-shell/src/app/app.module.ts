@@ -22,14 +22,7 @@ import { NgChartsModule } from 'ng2-charts';
 import { HttpClientModule } from '@angular/common/http';
 import { BrowserAnimationsModule, NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { TranslateModule } from '@ngx-translate/core';
-import {
-    AppConfigService,
-    DebugAppConfigService,
-    CoreModule,
-    CoreAutomationService,
-    AuthModule,
-    provideTranslations
-} from '@alfresco/adf-core';
+import { AppConfigService, DebugAppConfigService, CoreModule, CoreAutomationService, AuthModule, provideTranslations } from '@alfresco/adf-core';
 import { ExtensionsModule } from '@alfresco/adf-extensions';
 import { AppComponent } from './app.component';
 import { MaterialModule } from './material.module';
@@ -78,74 +71,85 @@ import { CustomEditorComponent, CustomWidgetComponent } from './components/cloud
 import { SearchFilterChipsComponent } from './components/search/search-filter-chips.component';
 import { UserInfoComponent } from './components/app-layout/user-info/user-info.component';
 
+import { HyMaterialModule } from '@hyland/ui/material';
+import { HyTranslateModule } from '@hyland/ui/language';
+
+import { HyContentListModule } from '@hyland/ui';
+import { HyPaginationIntl, HyPaginationModule } from '@hyland/ui/candidate/pagination';
+
 @NgModule({
-    imports: [
-        BrowserModule,
-        environment.e2e ? NoopAnimationsModule : BrowserAnimationsModule,
-        ReactiveFormsModule,
-        RouterModule.forRoot(appRoutes, { useHash: true }),
-        ...(environment.oidc ? [AuthModule.forRoot({ useHash: true })] : []),
-        FormsModule,
-        HttpClientModule,
-        MaterialModule,
-        TranslateModule.forRoot(),
-        CoreModule.forRoot(),
-        ContentModule.forRoot(),
-        InsightsModule.forRoot(),
-        ProcessModule.forRoot(),
-        ProcessServicesCloudModule.forRoot(),
-        ExtensionsModule.forRoot(),
-        NgChartsModule,
-        AppCloudSharedModule,
-        MonacoEditorModule.forRoot()
-    ],
-    declarations: [
-        AppComponent,
-        LogoutComponent,
-        AppLayoutComponent,
-        UserInfoComponent,
-        HomeComponent,
-        SearchBarComponent,
-        SearchResultComponent,
-        ProcessServiceComponent,
-        ShowDiagramComponent,
-        FormViewerComponent,
-        FormNodeViewerComponent,
-        AppsViewComponent,
-        FilesComponent,
-        FormComponent,
-        VersionManagerDialogAdapterComponent,
-        MetadataDialogAdapterComponent,
-        TaskAttachmentsComponent,
-        ProcessAttachmentsComponent,
-        DemoPermissionComponent,
-        DemoErrorComponent,
-        TreeViewSampleComponent,
-        CloudLayoutComponent,
-        AppsCloudDemoComponent,
-        TasksCloudDemoComponent,
-        ProcessesCloudDemoComponent,
-        TaskDetailsCloudDemoComponent,
-        CloudViewerComponent,
-        ProcessDetailsCloudDemoComponent,
-        StartTaskCloudDemoComponent,
-        StartProcessCloudDemoComponent,
-        CloudBreadcrumbsComponent,
-        CloudFiltersDemoComponent,
-        FormCloudDemoComponent,
-        CustomEditorComponent,
-        CustomWidgetComponent,
-        ProcessCloudLayoutComponent,
-        SearchFilterChipsComponent
-    ],
-    providers: [
-        { provide: AppConfigService, useClass: DebugAppConfigService }, // not use this service in production
-        provideTranslations('app', 'resources')
-    ],
-    bootstrap: [AppComponent]
+  imports: [
+    BrowserModule,
+    environment.e2e ? NoopAnimationsModule : BrowserAnimationsModule,
+    ReactiveFormsModule,
+    RouterModule.forRoot(appRoutes, { useHash: true }),
+    ...(environment.oidc ? [AuthModule.forRoot({ useHash: true })] : []),
+    FormsModule,
+    HttpClientModule,
+    MaterialModule,
+    TranslateModule.forRoot(),
+    CoreModule.forRoot(),
+    ContentModule.forRoot(),
+    InsightsModule.forRoot(),
+    ProcessModule.forRoot(),
+    ProcessServicesCloudModule.forRoot(),
+    ExtensionsModule.forRoot(),
+    NgChartsModule,
+    AppCloudSharedModule,
+    MonacoEditorModule.forRoot(),
+    HyMaterialModule,
+    HyContentListModule,
+    HyPaginationModule,
+    HyTranslateModule
+  ],
+  declarations: [
+    AppComponent,
+    LogoutComponent,
+    AppLayoutComponent,
+    UserInfoComponent,
+    HomeComponent,
+    SearchBarComponent,
+    SearchResultComponent,
+    ProcessServiceComponent,
+    ShowDiagramComponent,
+    FormViewerComponent,
+    FormNodeViewerComponent,
+    AppsViewComponent,
+    FilesComponent,
+    FormComponent,
+    VersionManagerDialogAdapterComponent,
+    MetadataDialogAdapterComponent,
+    TaskAttachmentsComponent,
+    ProcessAttachmentsComponent,
+    DemoPermissionComponent,
+    DemoErrorComponent,
+    TreeViewSampleComponent,
+    CloudLayoutComponent,
+    AppsCloudDemoComponent,
+    TasksCloudDemoComponent,
+    ProcessesCloudDemoComponent,
+    TaskDetailsCloudDemoComponent,
+    CloudViewerComponent,
+    ProcessDetailsCloudDemoComponent,
+    StartTaskCloudDemoComponent,
+    StartProcessCloudDemoComponent,
+    CloudBreadcrumbsComponent,
+    CloudFiltersDemoComponent,
+    FormCloudDemoComponent,
+    CustomEditorComponent,
+    CustomWidgetComponent,
+    ProcessCloudLayoutComponent,
+    SearchFilterChipsComponent
+  ],
+  providers: [
+    { provide: AppConfigService, useClass: DebugAppConfigService }, // not use this service in production
+    provideTranslations('app', 'resources'),
+    HyPaginationIntl
+  ],
+  bootstrap: [AppComponent]
 })
 export class AppModule {
-    constructor(automationService: CoreAutomationService) {
-        automationService.setup();
-    }
+  constructor(automationService: CoreAutomationService) {
+    automationService.setup();
+  }
 }

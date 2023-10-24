@@ -77,7 +77,6 @@
     "@mat-datetimepicker/moment": "11.0.3",
     "@ngx-translate/core": "^14.0.0",
     "@storybook/core-server": "7.4.3",
-    "angular-oauth2-oidc": "^13.0.1",
     "angular-oauth2-oidc-jwks": "^15.0.1",
     "apollo-angular": "^4.2.1",
     "chart.js": "4.4.0",
@@ -111,6 +110,12 @@
     "@editorjs/code": "2.8.0",
     "@editorjs/inline-code": "1.4.0",
     "@editorjs/marker": "1.2.2",
+    "@hyland/ui": "npm:@hylandsoftware/hy-ui@^7.0.0",
+    "@hyland/ui-shell": "npm:@hylandsoftware/hy-ui-shell@^7.0.0",
+    "@hylandsoftware/hy-ui-devkit": "^5.0.0",
+    "@hylandsoftware/hy-ui-icons": "^4.0.2",
+    "@hylandsoftware/hy-ui-standards": "^5.0.0",
+    "@ngneat/transloco": "^3.1.1",
     "@nx/angular": "16.8.1",
     "@nx/eslint-plugin": "16.8.1",
     "@nx/node": "16.8.1",
@@ -133,6 +138,7 @@
     "@typescript-eslint/parser": "5.62.0",
     "@typescript-eslint/typescript-estree": "6.7.0",
     "ajv": "^8.12.0",
+    "angular-oauth2-oidc": "^15.0.0",
     "commander": "6.2.1",
     "cspell": "^7.3.6",
     "css-loader": "^6.7.4",
@@ -231,4 +237,3 @@
   "module": "./index.js",
   "typings": "./index.d.ts"
 }
-
