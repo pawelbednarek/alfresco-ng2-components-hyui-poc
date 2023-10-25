@@ -15,7 +15,15 @@
  * limitations under the License.
  */
 
-import { BrowserVisibility, DateRangeFilterPage, NumberRangeFilterPage, SearchCategoriesPage, SearchCheckListPage, SearchRadioPage, SearchSliderPage, SearchTextPage } from '@alfresco/adf-testing';
+import {
+    BrowserVisibility,
+    NumberRangeFilterPage,
+    SearchCategoriesPage,
+    SearchCheckListPage,
+    SearchRadioPage,
+    SearchSliderPage,
+    SearchTextPage
+} from '@alfresco/adf-testing';
 import { $, by } from 'protractor';
 
 export class SearchFiltersPage {
@@ -28,7 +36,6 @@ export class SearchFiltersPage {
     fileSizeFilter = $('mat-expansion-panel[data-automation-id="expansion-panel-SEARCH.FACET_FIELDS.SIZE"]');
     nameFilter = $('mat-expansion-panel[data-automation-id="expansion-panel-Name"]');
     checkListFilter = $('mat-expansion-panel[data-automation-id="expansion-panel-Check List"]');
-    createdDateRangeFilter = $('mat-expansion-panel[data-automation-id="expansion-panel-Created Date (range)"]');
     typeFilter = $('mat-expansion-panel[data-automation-id="expansion-panel-Type"]');
     sizeRangeFilter = $('mat-expansion-panel[data-automation-id="expansion-panel-Content Size (range)"]');
     sizeSliderFilter = $('mat-expansion-panel[data-automation-id="expansion-panel-Content Size"]');
@@ -45,10 +52,6 @@ export class SearchFiltersPage {
 
     sizeRangeFilterPage(): NumberRangeFilterPage {
         return SearchCategoriesPage.numberRangeFilter(this.sizeRangeFilter);
-    }
-
-    createdDateRangeFilterPage(): DateRangeFilterPage {
-        return SearchCategoriesPage.dateRangeFilter(this.createdDateRangeFilter);
     }
 
     textFiltersPage(): SearchTextPage {
@@ -145,18 +148,6 @@ export class SearchFiltersPage {
 
     async checkCheckListFilterIsExpanded(): Promise<void> {
         await this.searchCategoriesPage.checkFilterIsExpanded(this.checkListFilter);
-    }
-
-    async checkCreatedRangeFilterIsDisplayed(): Promise<void> {
-        await this.searchCategoriesPage.checkFilterIsDisplayed(this.createdDateRangeFilter);
-    }
-
-    async clickCreatedRangeFilterHeader(): Promise<void> {
-        await this.searchCategoriesPage.clickFilterHeader(this.createdDateRangeFilter);
-    }
-
-    async checkCreatedRangeFilterIsExpanded(): Promise<void> {
-        await this.searchCategoriesPage.checkFilterIsExpanded(this.createdDateRangeFilter);
     }
 
     async checkTypeFilterIsDisplayed(): Promise<void> {
